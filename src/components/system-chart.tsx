@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from "recharts";
 
-interface ChartData {
+export interface ChartData {
   time: string;
   cpu: number;
   memory: number;
@@ -22,40 +22,16 @@ interface SystemChartProps {
   dataKey: "cpu" | "memory";
   color: string;
   unit: string;
+  data: ChartData[];
 }
 
-export function SystemChart({ title, dataKey, color, unit }: SystemChartProps) {
-  const [data, setData] = useState<ChartData[]>([]);
-
-  useEffect(() => {
-    // Initialize with some data
-    const initialData: ChartData[] = [];
-    for (let i = 29; i >= 0; i--) {
-      const time = new Date(Date.now() - i * 2000).toLocaleTimeString();
-      initialData.push({
-        time,
-        cpu: Math.random() * 100,
-        memory: Math.random() * 100,
-      });
-    }
-    setData(initialData);
-
-    // Update data every 2 seconds
-    const interval = setInterval(() => {
-      setData((prev) => {
-        const newData = [...prev.slice(1)];
-        newData.push({
-          time: new Date().toLocaleTimeString(),
-          cpu: Math.random() * 100,
-          memory: Math.random() * 100,
-        });
-        return newData;
-      });
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
-
+export function SystemChart({
+  title,
+  dataKey,
+  color,
+  unit,
+  data,
+}: SystemChartProps) {
   return (
     <Card className="cyber-gradient border cyber-border">
       <CardHeader>

@@ -1,6 +1,5 @@
 "use client";
 
-import { Activity, Bot, Server, Settings, Shield, Zap } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,42 +12,43 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useVersion } from "@/hooks/use-version";
+import { Activity, Bot, FileClock, Settings, Zap } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const navigation = [
   {
     title: "Dashboard",
     icon: Activity,
-    url: "#",
-    isActive: true,
-  },
-  {
-    title: "Bot Management",
-    icon: Bot,
-    url: "#",
-  },
-  {
-    title: "Server Stats",
-    icon: Server,
-    url: "#",
+    url: "/",
   },
   {
     title: "Process Monitor",
     icon: Zap,
-    url: "#",
+    url: "/process",
   },
   {
-    title: "Security",
-    icon: Shield,
-    url: "#",
+    title: "Logger",
+    icon: FileClock,
+    url: "/logger",
   },
   {
     title: "Settings",
     icon: Settings,
-    url: "#",
+    url: "/settings",
   },
 ];
 
+const state = {
+  loading: { color: "#FDC700", content: "System loading..." },
+  error: { color: "#FB2C36", content: "System error" },
+  online: { color: "#05DF72", content: "System online" },
+};
+
 export function AppSidebar() {
+  const { data, isLoading, isError } = useVersion();
+  const pathname = usePathname();
+
   return (
     <Sidebar className="cyber-border">
       <SidebarHeader className="border-b border-border/50 p-4">
@@ -57,8 +57,10 @@ export function AppSidebar() {
             <Bot className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-purple-400">BotControl</h2>
-            <p className="text-xs text-muted-foreground">PM2 Dashboard</p>
+            <h2 className="text-lg font-bold text-purple-400">Dashboard</h2>
+            <p className="text-xs text-muted-foreground">
+              Collect data from PM2
+            </p>
           </div>
         </div>
       </SidebarHeader>
@@ -74,7 +76,7 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    isActive={item.isActive}
+                    isActive={pathname === item.url}
                     className="hover:bg-purple-500/10 data-[active=true]:bg-purple-500/20 data-[active=true]:text-purple-400"
                   >
                     <a href={item.url}>
@@ -92,10 +94,37 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-border/50 p-4">
         <div className="text-xs text-muted-foreground">
           <div className="flex items-center gap-2 mb-1">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-            <span>System Online</span>
+            <div
+              className="w-2 h-2 rounded-full animate-pulse"
+              style={{
+                backgroundColor: isLoading
+                  ? state.loading.color
+                  : isError
+                  ? state.error.color
+                  : state.online.color,
+              }}
+            ></div>
+            <span
+              style={{
+                color: isLoading
+                  ? state.loading.color
+                  : isError
+                  ? state.error.color
+                  : state.online.color,
+              }}
+            >
+              {isLoading
+                ? state.loading.content
+                : isError
+                ? state.error.content
+                : state.online.content}
+            </span>
           </div>
-          <div>PM2 v5.3.0 • Node.js v18.17.0</div>
+          {data && (
+            <div>
+              PM2 v{data.pm2} • Node.js {data.node}
+            </div>
+          )}
         </div>
       </SidebarFooter>
     </Sidebar>

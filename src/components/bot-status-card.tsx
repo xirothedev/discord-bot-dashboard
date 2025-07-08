@@ -6,28 +6,19 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Play, Square, RotateCcw, Activity } from "lucide-react"
 import { cn } from "@/lib/utils"
-
-interface BotData {
-  id: string
-  name: string
-  status: "online" | "offline" | "error" | "restarting"
-  uptime: string
-  memory: number
-  cpu: number
-  restarts: number
-}
+import { PM2APIResponse } from "@/types/monitor"
 
 interface BotStatusCardProps {
-  bot: BotData
+  bot: PM2APIResponse
   onAction: (botId: string, action: "start" | "stop" | "restart") => void
 }
 
 export function BotStatusCard({ bot, onAction }: BotStatusCardProps) {
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleAction = async (action: "start" | "stop" | "restart") => {
+  const handleAction = (action: "start" | "stop" | "restart") => {
     setIsLoading(true)
-    await onAction(bot.id, action)
+    onAction(bot.pid.toString(), action)
     setTimeout(() => setIsLoading(false), 1000)
   }
 

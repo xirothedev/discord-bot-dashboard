@@ -1,74 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  ChevronDown,
-  ChevronRight,
-  Clock,
-  Bot,
-  User,
-  Hash,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import type { LogEntry as LogEntryType } from "@/types/log";
+import { LogContent } from "@/types/log";
+import { Bot, ChevronDown, ChevronRight } from "lucide-react";
+import { useState } from "react";
 
-interface LogEntryProps {
-  log: LogEntryType;
-}
-
-export function LogEntry({ log }: LogEntryProps) {
+export function LogEntry({ log }: { log: LogContent }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const levelConfig = {
-    info: {
-      color: "text-blue-400",
-      bg: "bg-blue-500/10 border-blue-500/30",
-      badge: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-    },
-    warn: {
-      color: "text-yellow-400",
-      bg: "bg-yellow-500/10 border-yellow-500/30",
-      badge: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-    },
-    error: {
-      color: "text-red-400",
-      bg: "bg-red-500/10 border-red-500/30",
-      badge: "bg-red-500/20 text-red-400 border-red-500/30",
-    },
-    debug: {
-      color: "text-gray-400",
-      bg: "bg-gray-500/10 border-gray-500/30",
-      badge: "bg-gray-500/20 text-gray-400 border-gray-500/30",
-    },
-    success: {
-      color: "text-green-400",
-      bg: "bg-green-500/10 border-green-500/30",
-      badge: "bg-green-500/20 text-green-400 border-green-500/30",
-    },
-  };
-
-  const categoryConfig = {
-    system: { icon: "⚙️", label: "System" },
-    command: { icon: "⚡", label: "Command" },
-    error: { icon: "❌", label: "Error" },
-    user: { icon: "👤", label: "User" },
-    api: { icon: "🔗", label: "API" },
-    database: { icon: "💾", label: "Database" },
-  };
-
-  const config = levelConfig[log.level];
-  const category = categoryConfig[log.category];
-
   return (
-    <Card
-      className={cn(
-        "border transition-all duration-200 hover:shadow-md",
-        config.bg
-      )}
-    >
+    <Card className="border transition-all duration-200 hover:shadow-md">
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
           <Button
@@ -87,31 +29,14 @@ export function LogEntry({ log }: LogEntryProps) {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2">
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Clock className="h-3 w-3" />
-                <span>{log.timestamp.toLocaleTimeString()}</span>
-              </div>
-
-              <Badge variant="outline" className={config.badge}>
-                {log.level.toUpperCase()}
-              </Badge>
-
-              <Badge
-                variant="outline"
-                className="bg-purple-500/20 text-purple-400 border-purple-500/30"
-              >
-                <span className="mr-1">{category.icon}</span>
-                {category.label}
-              </Badge>
-
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <Bot className="h-3 w-3" />
                 <span>{log.botName}</span>
               </div>
             </div>
 
-            <div className="text-sm font-medium mb-1">{log.message}</div>
+            <div className="text-sm font-medium mb-1">{log.content}</div>
 
-            {isExpanded && (
+            {/* {isExpanded && (
               <div className="mt-3 space-y-2 text-xs text-muted-foreground border-t border-border/50 pt-3">
                 {log.details && (
                   <div>
@@ -144,7 +69,7 @@ export function LogEntry({ log }: LogEntryProps) {
                   )}
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </CardContent>
