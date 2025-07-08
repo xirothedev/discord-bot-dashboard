@@ -8,6 +8,7 @@ import { BotStatusCard } from "@/components/bot-status-card"
 import { SystemChart } from "@/components/system-chart"
 import { Server, Cpu, MemoryStick, Activity, RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { LogViewer } from "@/components/log-viewer"
 
 interface BotData {
   id: string
@@ -200,6 +201,14 @@ export default function Dashboard() {
                   <BotStatusCard key={bot.id} bot={bot} onAction={handleBotAction} />
                 ))}
               </div>
+            </div>
+
+            {/* Logging System */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-purple-400">System Logs</h2>
+              </div>
+              <LogViewer bots={bots} />
             </div>
           </main>
         </div>
