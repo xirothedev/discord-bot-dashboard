@@ -11,7 +11,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
 	const [queryClient] = useState(() => new QueryClient());
 	return (
 		<QueryClientProvider client={queryClient}>
-			<SidebarProvider defaultOpen={false}>
+			<SidebarProvider>
 				<AppSidebar />
 				<SidebarInset>
 					<div className="bg-background min-h-screen">
