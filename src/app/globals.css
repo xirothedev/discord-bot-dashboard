@@ -160,27 +160,27 @@
 
 @layer components {
 	.cyber-glow {
-		box-shadow: 0 0 20px hsl(var(--cyber-purple) / 0.3);
+		box-shadow: 0 0 20px hsl(var(--color-cyber-purple) / 0.3);
 	}
 
 	.cyber-border {
-		border: 1px solid hsl(var(--cyber-purple) / 0.5);
+		border: 1px solid hsl(var(--color-cyber-purple) / 0.5);
 	}
 
 	.cyber-gradient {
-		background: linear-gradient(135deg, hsl(var(--cyber-purple) / 0.1) 0%, transparent 100%);
+		background: linear-gradient(135deg, hsl(var(--color-cyber-purple) / 0.1) 0%, transparent 100%);
 	}
 
 	.status-online {
-		color: hsl(var(--cyber-success));
+		color: hsl(var(--color-cyber-success));
 	}
 
 	.status-offline {
-		color: hsl(var(--cyber-error));
+		color: hsl(var(--color-cyber-error));
 	}
 
 	.status-warning {
-		color: hsl(var(--cyber-warning));
+		color: hsl(var(--color-cyber-warning));
 	}
 }
 
