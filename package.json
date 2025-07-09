@@ -1,6 +1,6 @@
 {
 	"name": "discord-bot-dashboard",
-	"description": "Discord bot management platform with intuitive UI and powerful customization features.",
+	"description": "A modern, intuitive platform for managing Discord bots with real-time monitoring and powerful customization.",
 	"version": "1.0.0",
 	"private": true,
 	"author": "xirothedev lethanhtrung.trungle@gmail.com",
@@ -16,7 +16,7 @@
 	"keywords": [
 		"next-15",
 		"template",
-		"shadcn",
+		"shadcn-ui",
 		"dashboard",
 		"pm2",
 		"monitor"

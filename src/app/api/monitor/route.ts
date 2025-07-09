@@ -44,6 +44,7 @@ export async function GET() {
 				const outLog = await getLastLines(app.pm2_env.pm_out_log_path, 1000);
 				const errLog = await getLastLines(app.pm2_env.pm_err_log_path, 1000);
 				return {
+					id: app.pm_id,
 					name: app.name,
 					pid: app.pid,
 					status: app.pm2_env.status,

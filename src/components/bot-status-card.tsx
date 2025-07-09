@@ -7,18 +7,19 @@ import { Badge } from "@/components/ui/badge";
 import { Play, Square, RotateCcw, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PM2APIResponse } from "@/types/monitor";
+import { useAction } from "@/hooks/use-action";
 
 interface BotStatusCardProps {
 	bot: PM2APIResponse;
-	onAction: (botId: string, action: "start" | "stop" | "restart") => void;
 }
 
-export function BotStatusCard({ bot, onAction }: BotStatusCardProps) {
+export function BotStatusCard({ bot }: BotStatusCardProps) {
 	const [isLoading, setIsLoading] = useState(false);
+	const { mutate } = useAction();
 
 	const handleAction = (action: "start" | "stop" | "restart") => {
 		setIsLoading(true);
-		onAction(bot.pid.toString(), action);
+		mutate({ action, pm_id: bot.id });
 		setTimeout(() => setIsLoading(false), 1000);
 	};
 
@@ -28,7 +29,7 @@ export function BotStatusCard({ bot, onAction }: BotStatusCardProps) {
 			bg: "bg-green-500/10 border-green-500/30",
 			badge: "bg-green-500/20 text-green-400 border-green-500/30",
 		},
-		offline: {
+		stopped: {
 			color: "status-offline",
 			bg: "bg-red-500/10 border-red-500/30",
 			badge: "bg-red-500/20 text-red-400 border-red-500/30",
@@ -62,7 +63,7 @@ export function BotStatusCard({ bot, onAction }: BotStatusCardProps) {
 				<div className="grid grid-cols-3 gap-4 text-sm">
 					<div>
 						<div className="text-muted-foreground">Uptime</div>
-						<div className="font-medium">{bot.uptime}</div>
+						<div className="font-medium">{bot.status === "stopped" ? 0 : bot.uptime}</div>
 					</div>
 					<div>
 						<div className="text-muted-foreground">Memory</div>
@@ -93,7 +94,7 @@ export function BotStatusCard({ bot, onAction }: BotStatusCardProps) {
 						size="sm"
 						variant="outline"
 						onClick={() => handleAction("stop")}
-						disabled={isLoading || bot.status === "offline"}
+						disabled={isLoading || bot.status === "stopped"}
 						className="flex-1 hover:border-red-500/50 hover:bg-red-500/20"
 					>
 						<Square className="mr-1 h-3 w-3" />

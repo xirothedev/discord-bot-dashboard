@@ -7,10 +7,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useMonitor } from "@/hooks/use-monitor";
 import { LogContent, LogFilter } from "@/types/log";
 import { Download } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
 export function LogViewer() {
-	const { data } = useMonitor();
+	const { data, isLoading } = useMonitor();
 	const [logs, setLogs] = useState<LogContent[]>([]);
 	const [filters, setFilters] = useState<LogFilter>({});
 
@@ -65,54 +65,74 @@ export function LogViewer() {
 	};
 
 	return (
-		<div className="space-y-4">
-			<LogFilters
-				filters={filters}
-				onFiltersChange={setFilters}
-				bots={data?.pm2.map((bot) => ({ id: bot.pid, name: bot.name }))}
-			/>
+		<Suspense fallback={<Loading />}>
+			<div className="space-y-4">
+				<LogFilters
+					filters={filters}
+					onFiltersChange={setFilters}
+					bots={data?.pm2.map((bot) => ({ id: bot.pid, name: bot.name }))}
+				/>
 
-			<Card className="cyber-gradient cyber-border border">
-				<CardHeader className="pb-3">
-					<div className="flex items-center justify-between">
-						<CardTitle className="text-lg font-semibold text-purple-400">
-							System Logs ({logs.length})
-						</CardTitle>
-						<div className="flex items-center gap-2">
-							<div className="flex items-center gap-1 text-xs"></div>
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={exportLogs}
-								className="bg-transparent hover:border-purple-500/50 hover:bg-purple-500/10"
-							>
-								<Download className="mr-1 h-3 w-3" />
-								Export
-							</Button>
+				<Card className="cyber-gradient cyber-border border">
+					<CardHeader className="pb-3">
+						<div className="flex items-center justify-between">
+							<CardTitle className="text-lg font-semibold text-purple-400">
+								System Logs ({logs.length})
+							</CardTitle>
+							<div className="flex items-center gap-2">
+								<div className="flex items-center gap-1 text-xs"></div>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={exportLogs}
+									className="bg-transparent hover:border-purple-500/50 hover:bg-purple-500/10"
+								>
+									<Download className="mr-1 h-3 w-3" />
+									Export
+								</Button>
+							</div>
 						</div>
-					</div>
-				</CardHeader>
+					</CardHeader>
 
-				<CardContent>
-					<ScrollArea className="h-[600px] w-full">
-						<div className="space-y-2 pr-4">
-							{logs.length === 0 ? (
-								<div className="py-8 text-center text-muted-foreground">
-									No logs found matching the current filters.
-								</div>
-							) : (
-								logs.map((log, index) => {
-									return (
-										<p key={index} className="mb-1 text-sm font-medium">
-											{log.content}
-										</p>
-									);
-								})
-							)}
-						</div>
-					</ScrollArea>
-				</CardContent>
-			</Card>
-		</div>
+					<CardContent>
+						<ScrollArea className="h-[600px] w-full">
+							<div className="space-y-2 pr-4">
+								{isLoading ? (
+									<div className="space-y-2">
+										{Array.from({ length: 30 }).map((_, i) => (
+											<div key={i} className="h-4 w-full animate-pulse rounded bg-muted"></div>
+										))}
+									</div>
+								) : logs.length === 0 ? (
+									<div className="py-8 text-center text-muted-foreground">
+										No logs found matching the current filters.
+									</div>
+								) : (
+									logs.map((log, index) => {
+										return (
+											<p key={index} className="mb-1 text-sm font-medium">
+												{log.content}
+											</p>
+										);
+									})
+								)}
+							</div>
+						</ScrollArea>
+					</CardContent>
+				</Card>
+			</div>
+		</Suspense>
 	);
 }
+
+const Loading = () => {
+	return (
+		<div className="space-y-4">
+			<div className="space-y-2">
+				{Array.from({ length: 30 }).map((_, i) => (
+					<div key={i} className="h-4 w-full animate-pulse rounded bg-muted"></div>
+				))}
+			</div>
+		</div>
+	);
+};

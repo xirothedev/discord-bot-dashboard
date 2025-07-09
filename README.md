@@ -2,6 +2,15 @@
 
 **A modern, intuitive platform for managing Discord bots with real-time monitoring and powerful customization.**
 
+[![Node.js](https://img.shields.io/badge/node-%3E=18.0.0-green?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Next.js](https://img.shields.io/badge/next.js-15-blue?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/react-19-61dafb?logo=react)](https://react.dev/)
+[![PM2](https://img.shields.io/badge/pm2-managed-brightgreen?logo=pm2)](https://pm2.keymetrics.io/)
+[![pnpm](https://img.shields.io/badge/pnpm-workspace-yellow?logo=pnpm)](https://pnpm.io/)
+[![MIT License](https://img.shields.io/github/license/xirothedev/discord-bot-dashboard?color=blue)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/xirothedev/discord-bot-dashboard?style=social)](https://github.com/xirothedev/discord-bot-dashboard/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/xirothedev/discord-bot-dashboard?color=orange)](https://github.com/xirothedev/discord-bot-dashboard/issues)
+
 ## Features
 
 - **System Monitoring:** Track CPU, RAM, uptime, process count, and bot statuses via PM2.
@@ -70,6 +79,16 @@
 
 - `GET /api/monitor`: Get system info, bot statuses, logs, CPU, RAM, uptime, etc.
 - `GET /api/version`: Get current PM2 and Node.js versions.
+- `POST /api/actions`: Start, stop, or restart a PM2 process by id.
+
+    **Payload:**
+
+    ```json
+    {
+      "action": "start" | "stop" | "restart",
+      "pm_id": number
+    }
+    ```
 
 ## Contribution
 

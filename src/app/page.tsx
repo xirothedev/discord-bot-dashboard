@@ -77,6 +77,11 @@ export default function Page() {
 							</div>
 							<Button
 								variant="outline"
+								onClick={(e) => {
+									e.preventDefault();
+
+									window.location.reload();
+								}}
 								size="sm"
 								className="bg-transparent hover:border-purple-500/50 hover:bg-purple-500/10"
 							>
@@ -155,7 +160,7 @@ export default function Page() {
 
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 								{bots.map((bot) => (
-									<BotStatusCard key={bot.pid} bot={bot} onAction={() => {}} />
+									<BotStatusCard key={bot.pid} bot={bot} />
 								))}
 							</div>
 						</div>
