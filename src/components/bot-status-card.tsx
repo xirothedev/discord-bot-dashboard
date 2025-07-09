@@ -25,14 +25,14 @@ export function BotStatusCard({ bot }: BotStatusCardProps) {
 	const statusColors = {
 		online: "bg-green-500/20 text-green-400 border-green-500/30",
 		stopped: "bg-gray-500/20 text-gray-400 border-gray-500/30",
-		error: "bg-red-500/20 text-red-400 border-red-500/30",
+		errored: "bg-red-500/20 text-red-400 border-red-500/30",
 		restarting: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
 	};
 
 	const statusDots = {
 		online: "bg-green-500",
 		stopped: "bg-gray-500",
-		error: "bg-red-500",
+		errored: "bg-red-500",
 		restarting: "bg-yellow-500 animate-pulse",
 	};
 

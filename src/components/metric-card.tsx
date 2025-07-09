@@ -10,7 +10,7 @@ interface MetricCardProps {
 	subtitle?: string;
 	progress?: number;
 	trend?: "up" | "down" | "stable";
-	status?: "success" | "warning" | "errored";
+	status: "success" | "warning" | "errored" | "info";
 	icon?: React.ReactNode;
 	className?: string;
 }
