@@ -25,6 +25,7 @@
 		"build": "next build",
 		"dev": "next dev --turbo",
 		"format": "prettier --write .",
+		"typecheck": "tsc --noEmit",
 		"lint": "next lint",
 		"start": "next start",
 		"prepare": "husky"

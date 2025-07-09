@@ -33,10 +33,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Run Biome Lint
+      - name: Run eslint
         run: pnpm lint
 
-      - name: Run Biome Format Check
+      - name: Run Prettier Format Check
         run: pnpm format
 
       - name: Type Check
