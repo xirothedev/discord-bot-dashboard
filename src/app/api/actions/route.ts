@@ -8,6 +8,11 @@ const execAsync = promisify(exec);
  * POST body: { action: "start" | "stop" | "restart", pm_id: number }
  */
 export async function POST(req: Request) {
+	const ip = req.headers.get("x-forwarded-for");
+	if (ip !== "127.0.0.1" && ip !== "::1") {
+		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+	}
+
 	try {
 		const { action, pm_id } = await req.json();
 		if (!action || typeof pm_id === "undefined") {
