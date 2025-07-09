@@ -23,6 +23,13 @@ export function MetricCard({ title, value, subtitle, progress, status, icon, cla
 		info: "text-purple-400 border-purple-500/30 bg-purple-500/5",
 	};
 
+	const statusIndicatorClassName = {
+		success: "bg-green-400",
+		warning: "bg-yellow-400",
+		errored: "bg-red-400",
+		info: "bg-purple-400",
+	};
+
 	return (
 		<Card
 			className={cn(
@@ -43,6 +50,7 @@ export function MetricCard({ title, value, subtitle, progress, status, icon, cla
 						<Progress
 							value={progress}
 							className="h-2"
+							indicatorClassName={statusIndicatorClassName[status]}
 							style={{
 								background: "hsl(var(--muted))",
 							}}

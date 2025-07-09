@@ -7,12 +7,13 @@ import {
 	SidebarGroup,
 	SidebarGroupContent,
 	SidebarGroupLabel,
+	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useVersion } from "@/hooks/use-version";
-import { Activity, FileClock, Settings } from "lucide-react";
+import { Activity, Bot, FileClock, Settings } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const navigation = [
@@ -45,7 +46,18 @@ export function AppSidebar() {
 
 	return (
 		<Sidebar className="cyber-border">
-			<SidebarContent className="mt-12 min-w-56">
+			<SidebarHeader className="border-border/50 border-b p-4">
+				<div className="flex items-center gap-2">
+					<div className="flex h-8 w-8 items-center justify-center rounded bg-gradient-to-br from-purple-500 to-purple-700">
+						<Bot className="h-4 w-4 text-white" />
+					</div>
+					<div>
+						<h2 className="text-lg font-bold text-purple-400">BotControl</h2>
+						<p className="text-muted-foreground text-xs">PM2 Dashboard</p>
+					</div>
+				</div>
+			</SidebarHeader>
+			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel className="font-semibold text-purple-400">Navigation</SidebarGroupLabel>
 					<SidebarGroupContent>
