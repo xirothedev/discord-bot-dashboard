@@ -1,4 +1,4 @@
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
@@ -8,6 +8,8 @@ interface ActionPayload {
 }
 
 export function useAction(options?: { onSuccess?: (data: any) => void; onError?: (error: any) => void }) {
+	const { toast } = useToast();
+
 	return useMutation({
 		mutationFn: async (payload: ActionPayload) => {
 			const res = await axios.post("/api/actions", payload);

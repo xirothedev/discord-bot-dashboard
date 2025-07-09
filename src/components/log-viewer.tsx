@@ -7,31 +7,29 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useLogs } from "@/hooks/use-logs";
 import { LogApiLogEntry, LogFilter } from "@/types/log";
 import { Download } from "lucide-react";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 
 export function LogViewer() {
 	const { data, isLoading } = useLogs({});
-	const [logs, setLogs] = useState<LogApiLogEntry[]>([]);
 	const [filters, setFilters] = useState<LogFilter>({});
 
-	useEffect(() => {
-		if (!data) return;
+	const filteredLogs = useMemo(() => {
+		if (!data) return [];
 		const filtered: LogApiLogEntry[] = [];
 		data.forEach((bot) => {
 			if (filters.botId && bot.pm_id.toString() !== filters.botId) return;
-			const filteredLogs = bot.logs.filter((log) => {
+			const logs = bot.logs.filter((log) => {
 				if (filters.type && log.type !== filters.type) return false;
 				if (filters.search && !log.content.includes(filters.search)) return false;
 				return true;
 			});
-			// Optionally, add bot info to each log
-			filtered.push(...filteredLogs.map((l) => ({ ...l, pm_id: bot.pm_id, name: bot.name, pid: bot.pid })));
+			filtered.push(...logs.map((l) => ({ ...l, pm_id: bot.pm_id, name: bot.name, pid: bot.pid })));
 		});
-		setLogs(filtered);
+		return filtered;
 	}, [data, filters]);
 
 	const exportLogs = () => {
-		const dataStr = JSON.stringify(logs, null, 2);
+		const dataStr = JSON.stringify(filteredLogs, null, 2);
 		const dataBlob = new Blob([dataStr], { type: "application/json" });
 		const url = URL.createObjectURL(dataBlob);
 		const link = document.createElement("a");
@@ -54,7 +52,7 @@ export function LogViewer() {
 					<CardHeader className="pb-3">
 						<div className="flex items-center justify-between">
 							<CardTitle className="text-lg font-semibold text-purple-400">
-								System Logs ({logs.length})
+								System Logs ({filteredLogs.length})
 							</CardTitle>
 							<div className="flex items-center gap-2">
 								<div className="flex items-center gap-1 text-xs"></div>
@@ -80,12 +78,12 @@ export function LogViewer() {
 											<div key={i} className="bg-muted h-4 w-full animate-pulse rounded"></div>
 										))}
 									</div>
-								) : logs.length === 0 ? (
+								) : filteredLogs.length === 0 ? (
 									<div className="text-muted-foreground py-8 text-center">
 										No logs found matching the current filters.
 									</div>
 								) : (
-									logs.map((log, index) => {
+									filteredLogs.map((log, index) => {
 										return (
 											<p key={index} className="mb-1 text-sm font-medium">
 												[{log.type}] {log.content}
