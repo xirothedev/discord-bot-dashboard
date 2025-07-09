@@ -11,6 +11,8 @@
 [![GitHub stars](https://img.shields.io/github/stars/xirothedev/discord-bot-dashboard?style=social)](https://github.com/xirothedev/discord-bot-dashboard/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/xirothedev/discord-bot-dashboard?color=orange)](https://github.com/xirothedev/discord-bot-dashboard/issues)
 
+![Dashboard Screenshot](./assets/screenshot.jpeg)
+
 ## Features
 
 - **System Monitoring:** Track CPU, RAM, uptime, process count, and bot statuses via PM2.
