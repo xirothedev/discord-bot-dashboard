@@ -9,9 +9,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { debounce } from "@/lib/utils";
 import type { LogFilter } from "@/types/log";
-import { PM2APIResponse } from "@/types/monitor";
 import { Filter, Search, X } from "lucide-react";
+import { useMemo, useRef } from "react";
 
 interface LogFiltersProps {
   filters: LogFilter;
@@ -19,13 +20,27 @@ interface LogFiltersProps {
   bots?: Array<{ id: number; name: string }>;
 }
 
-export function LogFilters({ filters, onFiltersChange, bots }: LogFiltersProps) {
+export function LogFilters({
+  filters,
+  onFiltersChange,
+  bots,
+}: LogFiltersProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const handleFilterChange = (key: keyof LogFilter, value: any) => {
     onFiltersChange({ ...filters, [key]: value });
   };
 
+  const debouncedSearch = useMemo(
+    () => debounce((value: string) => handleFilterChange("search", value), 500),
+    [filters]
+  );
+
   const clearFilters = () => {
     onFiltersChange({});
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
   };
 
   const activeFiltersCount = Object.values(filters).filter(Boolean).length;
@@ -68,9 +83,9 @@ export function LogFilters({ filters, onFiltersChange, bots }: LogFiltersProps) 
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
+              ref={inputRef}
               placeholder="Search logs..."
-              value={filters.search || ""}
-              onChange={(e) => handleFilterChange("search", e.target.value)}
+              onChange={(e) => debouncedSearch(e.target.value)}
               className="pl-10 bg-background/50 border-border/50 focus:border-purple-500/50"
             />
           </div>
@@ -88,7 +103,7 @@ export function LogFilters({ filters, onFiltersChange, bots }: LogFiltersProps) 
               <SelectContent>
                 <SelectItem value="all">All Bots</SelectItem>
                 {bots?.map((bot) => (
-                  <SelectItem key={bot.id} value={bot.name}>
+                  <SelectItem key={bot.id} value={bot.id.toString()}>
                     {bot.name} - {bot.id}
                   </SelectItem>
                 ))}

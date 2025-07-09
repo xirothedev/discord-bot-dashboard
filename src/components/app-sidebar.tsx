@@ -13,7 +13,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useVersion } from "@/hooks/use-version";
-import { Activity, Bot, FileClock, Settings, Zap } from "lucide-react";
+import { Activity, Bot, FileClock, Settings } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const navigation = [
@@ -21,11 +21,6 @@ const navigation = [
     title: "Dashboard",
     icon: Activity,
     url: "/",
-  },
-  {
-    title: "Process Monitor",
-    icon: Zap,
-    url: "/process",
   },
   {
     title: "Logger",

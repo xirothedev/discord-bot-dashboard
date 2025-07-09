@@ -1,6 +1,7 @@
 import { MonitorApiResponse } from "@/types/monitor";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import data from "@/data/index.json" assert {type: "json"}
 
 export function useMonitor() {
   return useQuery<MonitorApiResponse>({
@@ -9,6 +10,6 @@ export function useMonitor() {
       const res = await axios.get("/api/monitor");
       return res.data;
     },
-    refetchInterval: 1000,
+    refetchInterval: data.refetchInterval,
   });
 }

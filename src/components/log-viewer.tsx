@@ -1,6 +1,5 @@
 "use client";
 
-import { LogEntry } from "@/components/log-entry";
 import { LogFilters } from "@/components/log-filters";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -54,7 +53,7 @@ export function LogViewer() {
   }, [data, filters]);
 
   const exportLogs = () => {
-    const dataStr = JSON.stringify("", null, 2);
+    const dataStr = JSON.stringify(logs, null, 2);
     const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement("a");
@@ -102,7 +101,9 @@ export function LogViewer() {
                 </div>
               ) : (
                 logs.map((log, index) => {
-                  return <LogEntry key={index} log={log} />;
+                  return (
+                    <p key={index} className="text-sm font-medium mb-1">{log.content}</p>
+                  );
                 })
               )}
             </div>
