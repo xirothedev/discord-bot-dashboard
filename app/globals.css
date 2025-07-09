@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 263 70% 50%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 263 70% 50%;
+    --radius: 0.5rem;
+
+    /* Cyberpunk custom variables */
+    --cyber-purple: 263 70% 50%;
+    --cyber-purple-dark: 263 70% 35%;
+    --cyber-purple-light: 263 70% 65%;
+    --cyber-gray: 0 0% 20%;
+    --cyber-gray-light: 0 0% 30%;
+    --cyber-success: 142 76% 36%;
+    --cyber-warning: 38 92% 50%;
+    --cyber-error: 0 72% 51%;
+
+    /* Sidebar variables */
+    --sidebar-background: 0 0% 3.9%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 263 70% 50%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 0 0% 14.9%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 14.9%;
+    --sidebar-ring: 263 70% 50%;
+  }
+}
+
+@layer components {
+  .cyber-glow {
+    box-shadow: 0 0 20px hsl(var(--cyber-purple) / 0.3);
+  }
+
+  .cyber-border {
+    border: 1px solid hsl(var(--cyber-purple) / 0.5);
+  }
+
+  .cyber-gradient {
+    background: linear-gradient(135deg, hsl(var(--cyber-purple) / 0.1) 0%, transparent 100%);
+  }
+
+  .status-online {
+    color: hsl(var(--cyber-success));
+  }
+
+  .status-offline {
+    color: hsl(var(--cyber-error));
+  }
+
+  .status-warning {
+    color: hsl(var(--cyber-warning));
+  }
+}

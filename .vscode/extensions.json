@@ -1,9 +1,0 @@
-{
-	"recommendations": [
-		"esbenp.prettier-vscode",
-		"christian-kohler.npm-intellisense",
-		"christian-kohler.path-intellisense",
-		"EditorConfig.EditorConfig",
-		"YoavBls.pretty-ts-errors"
-	]
-}
