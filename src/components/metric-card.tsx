@@ -10,16 +10,16 @@ interface MetricCardProps {
 	subtitle?: string;
 	progress?: number;
 	trend?: "up" | "down" | "stable";
-	status?: "success" | "warning" | "error" | "info";
+	status?: "success" | "warning" | "errored";
 	icon?: React.ReactNode;
 	className?: string;
 }
 
-export function MetricCard({ title, value, subtitle, progress, status = "info", icon, className }: MetricCardProps) {
+export function MetricCard({ title, value, subtitle, progress, status, icon, className }: MetricCardProps) {
 	const statusColors = {
 		success: "text-green-400 border-green-500/30 bg-green-500/5",
 		warning: "text-yellow-400 border-yellow-500/30 bg-yellow-500/5",
-		error: "text-red-400 border-red-500/30 bg-red-500/5",
+		errored: "text-red-400 border-red-500/30 bg-red-500/5",
 		info: "text-purple-400 border-purple-500/30 bg-purple-500/5",
 	};
 
@@ -32,12 +32,12 @@ export function MetricCard({ title, value, subtitle, progress, status = "info", 
 			)}
 		>
 			<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-				<CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+				<CardTitle className="text-muted-foreground text-sm font-medium">{title}</CardTitle>
 				{icon && <div className={cn("h-4 w-4", statusColors[status].split(" ")[0])}>{icon}</div>}
 			</CardHeader>
 			<CardContent>
 				<div className="mb-1 text-2xl font-bold">{value}</div>
-				{subtitle && <p className="mb-2 text-xs text-muted-foreground">{subtitle}</p>}
+				{subtitle && <p className="text-muted-foreground mb-2 text-xs">{subtitle}</p>}
 				{progress !== undefined && (
 					<div className="space-y-1">
 						<Progress
@@ -47,7 +47,7 @@ export function MetricCard({ title, value, subtitle, progress, status = "info", 
 								background: "hsl(var(--muted))",
 							}}
 						/>
-						<div className="flex justify-between text-xs text-muted-foreground">
+						<div className="text-muted-foreground flex justify-between text-xs">
 							<span>Usage</span>
 							<span>{progress}%</span>
 						</div>

@@ -7,13 +7,12 @@ import {
 	SidebarGroup,
 	SidebarGroupContent,
 	SidebarGroupLabel,
-	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useVersion } from "@/hooks/use-version";
-import { Activity, Bot, FileClock, Settings } from "lucide-react";
+import { Activity, FileClock, Settings } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const navigation = [
@@ -46,19 +45,7 @@ export function AppSidebar() {
 
 	return (
 		<Sidebar className="cyber-border">
-			<SidebarHeader className="border-b border-border/50 p-4">
-				<div className="flex items-center gap-2">
-					<div className="flex h-8 w-8 items-center justify-center rounded bg-gradient-to-br from-purple-500 to-purple-700">
-						<Bot className="h-4 w-4 text-white" />
-					</div>
-					<div>
-						<h2 className="text-lg font-bold text-purple-400">Dashboard</h2>
-						<p className="text-xs text-muted-foreground">Collect data from PM2</p>
-					</div>
-				</div>
-			</SidebarHeader>
-
-			<SidebarContent>
+			<SidebarContent className="mt-12 min-w-56">
 				<SidebarGroup>
 					<SidebarGroupLabel className="font-semibold text-purple-400">Navigation</SidebarGroupLabel>
 					<SidebarGroupContent>
@@ -82,8 +69,8 @@ export function AppSidebar() {
 				</SidebarGroup>
 			</SidebarContent>
 
-			<SidebarFooter className="border-t border-border/50 p-4">
-				<div className="text-xs text-muted-foreground">
+			<SidebarFooter className="border-border/50 border-t p-4">
+				<div className="text-muted-foreground text-xs">
 					<div className="mb-1 flex items-center gap-2">
 						<div
 							className="h-2 w-2 animate-pulse rounded-full"

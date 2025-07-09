@@ -1,5 +1,5 @@
-export type Status = "error" | "online" | "stopped" | "restarting";
-export const statusList = ["error", "online", "offline", "restarting"] as const;
+export type Status = "errored" | "online" | "stopped" | "restarting";
+export const statusList = ["errored", "online", "offline", "restarting"] as const;
 
 export interface PM2APILogsResponse {
 	stdout: string[];

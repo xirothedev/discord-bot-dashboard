@@ -188,6 +188,22 @@
 	.text-balance {
 		text-wrap: balance;
 	}
+
+	.bg-sidebar {
+		background-color: var(--color-sidebar-DEFAULT);
+	}
+	.text-sidebar-foreground {
+		color: var(--color-sidebar-foreground);
+	}
+	.bg-sidebar-accent {
+		background-color: var(--color-sidebar-accent);
+	}
+	.text-sidebar-accent-foreground {
+		color: var(--color-sidebar-accent-foreground);
+	}
+	.border-sidebar-border {
+		border-color: var(--color-sidebar-border);
+	}
 }
 
 body {

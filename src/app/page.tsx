@@ -1,14 +1,11 @@
 "use client";
 
-import { AppSidebar } from "@/components/app-sidebar";
 import { BotStatusCard } from "@/components/bot-status-card";
 import { MetricCard } from "@/components/metric-card";
 import { ChartData, SystemChart } from "@/components/system-chart";
-import { Button } from "@/components/ui/button";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useMonitor } from "@/hooks/use-monitor";
 import { MonitorApiResponse, PM2APIResponse } from "@/types/monitor";
-import { Activity, Cpu, MemoryStick, RefreshCw, Server } from "lucide-react";
+import { Activity, Cpu, MemoryStick, Server } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -63,110 +60,72 @@ export default function Page() {
 	const processCount = systemMetrics ? systemMetrics.processCount : 0;
 
 	return (
-		<SidebarProvider>
-			<AppSidebar />
-			<SidebarInset>
-				<div className="min-h-screen bg-background">
-					{/* Header */}
-					<header className="sticky top-0 z-10 border-b border-border/50 bg-card/50 backdrop-blur-sm">
-						<div className="flex h-16 items-center gap-4 px-6">
-							<SidebarTrigger className="hover:bg-purple-500/10" />
-							<div className="flex-1">
-								<h1 className="text-2xl font-bold text-purple-400">Discord Bot Dashboard</h1>
-								<p className="text-sm text-muted-foreground">Monitor and manage your PM2 processes</p>
-							</div>
-							<Button
-								variant="outline"
-								onClick={(e) => {
-									e.preventDefault();
+		<main className="space-y-6 p-6">
+			{/* System Overview */}
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+				<MetricCard
+					title="CPU Usage"
+					value={`${cpuUsage}%`}
+					progress={cpuUsage}
+					status={cpuUsage > 80 ? "errored" : cpuUsage > 60 ? "warning" : "success"}
+					icon={<Cpu />}
+				/>
+				<MetricCard
+					title="Memory Usage"
+					value={`${memoryUsage}%`}
+					subtitle={`${usedMemory} / ${totalMemory}`}
+					progress={memoryUsage}
+					status={memoryUsage > 85 ? "errored" : memoryUsage > 70 ? "warning" : "success"}
+					icon={<MemoryStick />}
+				/>
+				<MetricCard
+					title="Active Bots"
+					value={`${onlineBots}/${totalBots}`}
+					subtitle="Bots online"
+					status={onlineBots === totalBots ? "success" : onlineBots > 0 ? "warning" : "errored"}
+					icon={<Activity />}
+				/>
+				<MetricCard
+					title="System Uptime"
+					value={uptime}
+					subtitle={`${processCount} processes`}
+					status="info"
+					icon={<Server />}
+				/>
+			</div>
 
-									window.location.reload();
-								}}
-								size="sm"
-								className="bg-transparent hover:border-purple-500/50 hover:bg-purple-500/10"
-							>
-								<RefreshCw className="mr-2 h-4 w-4" />
-								Refresh
-							</Button>
+			{/* Charts */}
+			<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+				<SystemChart title="CPU Usage" dataKey="cpu" color="#a855f7" unit="%" data={chartData} />
+				<SystemChart title="Memory Usage" dataKey="memory" color="#06b6d4" unit="%" data={chartData} />
+			</div>
+
+			{/* Bot Management */}
+			<div className="space-y-4">
+				<div className="flex items-center justify-between">
+					<h2 className="text-xl font-semibold text-purple-400">Bot Management</h2>
+					<div className="text-muted-foreground flex items-center gap-2 text-sm">
+						<div className="flex items-center gap-1">
+							<div className="h-2 w-2 rounded-full bg-green-500"></div>
+							<span>Online</span>
 						</div>
-					</header>
-
-					{/* Main Content */}
-					<main className="space-y-6 p-6">
-						{/* System Overview */}
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-							<MetricCard
-								title="CPU Usage"
-								value={`${cpuUsage}%`}
-								progress={cpuUsage}
-								status={cpuUsage > 80 ? "error" : cpuUsage > 60 ? "warning" : "success"}
-								icon={<Cpu />}
-							/>
-							<MetricCard
-								title="Memory Usage"
-								value={`${memoryUsage}%`}
-								subtitle={`${usedMemory} / ${totalMemory}`}
-								progress={memoryUsage}
-								status={memoryUsage > 85 ? "error" : memoryUsage > 70 ? "warning" : "success"}
-								icon={<MemoryStick />}
-							/>
-							<MetricCard
-								title="Active Bots"
-								value={`${onlineBots}/${totalBots}`}
-								subtitle="Bots online"
-								status={onlineBots === totalBots ? "success" : onlineBots > 0 ? "warning" : "error"}
-								icon={<Activity />}
-							/>
-							<MetricCard
-								title="System Uptime"
-								value={uptime}
-								subtitle={`${processCount} processes`}
-								status="info"
-								icon={<Server />}
-							/>
+						<div className="flex items-center gap-1">
+							<div className="h-2 w-2 rounded-full bg-red-500"></div>
+							<span>Offline</span>
 						</div>
-
-						{/* Charts */}
-						<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-							<SystemChart title="CPU Usage" dataKey="cpu" color="#a855f7" unit="%" data={chartData} />
-							<SystemChart
-								title="Memory Usage"
-								dataKey="memory"
-								color="#06b6d4"
-								unit="%"
-								data={chartData}
-							/>
+						<div className="flex items-center gap-1">
+							<div className="h-2 w-2 rounded-full bg-yellow-500"></div>
+							<span>Error</span>
 						</div>
-
-						{/* Bot Management */}
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h2 className="text-xl font-semibold text-purple-400">Bot Management</h2>
-								<div className="flex items-center gap-2 text-sm text-muted-foreground">
-									<div className="flex items-center gap-1">
-										<div className="h-2 w-2 rounded-full bg-green-500"></div>
-										<span>Online</span>
-									</div>
-									<div className="flex items-center gap-1">
-										<div className="h-2 w-2 rounded-full bg-red-500"></div>
-										<span>Offline</span>
-									</div>
-									<div className="flex items-center gap-1">
-										<div className="h-2 w-2 rounded-full bg-yellow-500"></div>
-										<span>Error</span>
-									</div>
-								</div>
-							</div>
-
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-								{bots.map((bot) => (
-									<BotStatusCard key={bot.pid} bot={bot} />
-								))}
-							</div>
-						</div>
-					</main>
+					</div>
 				</div>
-			</SidebarInset>
-		</SidebarProvider>
+
+				<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+					{bots.map((bot) => (
+						<BotStatusCard key={bot.pid} bot={bot} />
+					))}
+				</div>
+			</div>
+		</main>
 	);
 }
