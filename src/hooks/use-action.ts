@@ -1,6 +1,7 @@
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
+import { toast } from "sonner";
 
 interface ActionPayload {
 	action: "start" | "stop" | "restart";
@@ -8,24 +9,17 @@ interface ActionPayload {
 }
 
 export function useAction(options?: { onSuccess?: (data: any) => void; onError?: (error: any) => void }) {
-	const { toast } = useToast();
-
 	return useMutation({
 		mutationFn: async (payload: ActionPayload) => {
 			const res = await axios.post("/api/actions", payload);
 			return res.data;
 		},
-		onSuccess: (data) => {
-			toast({
-				title: "Successful",
-				description: data.result || "Do action successful!",
-			});
+		onSuccess: () => {
+			toast.success("Do action successful!");
 		},
 		onError: (error: AxiosError<string>) => {
-			toast({
-				title: "Error",
+			toast.error("Error", {
 				description: error?.response?.data || error.message || "An error occurred!",
-				variant: "destructive",
 			});
 		},
 	});

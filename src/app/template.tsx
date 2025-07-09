@@ -3,12 +3,15 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { Button } from "@/components/ui/button";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RefreshCw } from "lucide-react";
-import { useState } from "react";
-import { useCallback } from "react";
+import { useTheme } from "next-themes";
+import { useCallback, useState } from "react";
+import { ToasterProps } from "sonner";
 
 export default function Template({ children }: { children: React.ReactNode }) {
+	const { resolvedTheme } = useTheme();
 	const [queryClient] = useState(() => new QueryClient());
 	const handleRefresh = useCallback(() => {
 		queryClient.invalidateQueries();
@@ -45,6 +48,15 @@ export default function Template({ children }: { children: React.ReactNode }) {
 					</div>
 				</SidebarInset>
 			</SidebarProvider>
+			<Toaster
+				position="top-right"
+				richColors
+				closeButton
+				theme={resolvedTheme as ToasterProps["theme"]}
+				toastOptions={{
+					className: "shadow-md",
+				}}
+			/>
 		</QueryClientProvider>
 	);
 }

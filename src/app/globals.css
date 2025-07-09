@@ -210,6 +210,11 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+.sonner-toast {
+	background: var(--background) !important;
+	color: var(--foreground) !important;
+}
+
 /* @config "./tailwind.config.ts"; // Adjust the path as needed */
 /*
   Note: Some options in the old tailwind.config.ts file (such as 'corePlugins', 'safelist', 'separator')
