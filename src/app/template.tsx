@@ -6,9 +6,14 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RefreshCw } from "lucide-react";
 import { useState } from "react";
+import { useCallback } from "react";
 
 export default function Template({ children }: { children: React.ReactNode }) {
 	const [queryClient] = useState(() => new QueryClient());
+	const handleRefresh = useCallback(() => {
+		queryClient.invalidateQueries();
+	}, [queryClient]);
+
 	return (
 		<QueryClientProvider client={queryClient}>
 			<SidebarProvider>
@@ -27,11 +32,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
 								</div>
 								<Button
 									variant="outline"
-									onClick={(e) => {
-										e.preventDefault();
-
-										window.location.reload();
-									}}
+									onClick={handleRefresh}
 									size="sm"
 									className="bg-transparent hover:border-purple-500/50 hover:bg-purple-500/10"
 								>
