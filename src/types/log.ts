@@ -4,9 +4,14 @@ export interface LogFilter {
 	type?: "stdout" | "stderr";
 }
 
-export interface LogContent {
-	botId: string;
-	botName: string;
+export interface LogApiLogEntry {
 	content: string;
-	type: string;
+	type: "stdout" | "stderr";
+}
+
+export interface LogApiResponse {
+	pm_id: number;
+	name: string;
+	pid: number;
+	logs: LogApiLogEntry[];
 }

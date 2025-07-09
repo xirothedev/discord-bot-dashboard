@@ -7,7 +7,7 @@ export function useMonitor() {
 	return useQuery<MonitorApiResponse>({
 		queryKey: ["monitor"],
 		queryFn: async () => {
-			const res = await axios.get("/api/monitor");
+			const res = await axios.get<MonitorApiResponse>("/api/monitor");
 			return res.data;
 		},
 		refetchInterval: data.refetchInterval,

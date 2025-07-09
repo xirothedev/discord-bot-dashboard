@@ -1,11 +1,6 @@
 export type Status = "errored" | "online" | "stopped" | "restarting";
 export const statusList = ["errored", "online", "offline", "restarting"] as const;
 
-export interface PM2APILogsResponse {
-	stdout: string[];
-	stderr: string[];
-}
-
 export interface PM2APIResponse {
 	id: number;
 	name: string;
@@ -15,7 +10,6 @@ export interface PM2APIResponse {
 	cpu: number;
 	uptime: string;
 	restarts: number;
-	logs: PM2APILogsResponse;
 }
 
 export interface MonitorApiResponse {

@@ -20,7 +20,7 @@ export async function GET() {
 		const pm2List = JSON.parse(stdout);
 
 		// Helper to read last N lines from a file
-		async function getLastLines(filePath: string, lines: number = 1000): Promise<string[]> {
+		async function getLastLines(filePath: string, lines: number = 200): Promise<string[]> {
 			try {
 				const { stdout } = await execAsync(`tail -n ${lines} ${filePath}`);
 				return stdout.split("\n").filter(Boolean);
@@ -37,28 +37,20 @@ export async function GET() {
 		const { stdout: processCountStdout } = await execAsync("ps -e --no-headers | wc -l");
 		const processCount = Number(processCountStdout.trim());
 
-		// Gather PM2 process info with logs
-		const pm2WithLogs = await Promise.all(
-			pm2List.map(async (app: Pm2Process) => {
-				const memoryMB = Number((app.monit.memory / 1024 / 1024).toFixed(2));
-				const outLog = await getLastLines(app.pm2_env.pm_out_log_path, 1000);
-				const errLog = await getLastLines(app.pm2_env.pm_err_log_path, 1000);
-				return {
-					id: app.pm_id,
-					name: app.name,
-					pid: app.pid,
-					status: app.pm2_env.status,
-					memory: memoryMB,
-					cpu: app.monit.cpu,
-					uptime: formatUptime(Date.now() - app.pm2_env.pm_uptime),
-					restarts: app.pm2_env.restart_time,
-					logs: {
-						stdout: outLog,
-						stderr: errLog,
-					},
-				};
-			}),
-		);
+		// Gather PM2 process info (không lấy logs)
+		const pm2WithoutLogs = pm2List.map((app: Pm2Process) => {
+			const memoryMB = Number((app.monit.memory / 1024 / 1024).toFixed(2));
+			return {
+				id: app.pm_id,
+				name: app.name,
+				pid: app.pid,
+				status: app.pm2_env.status,
+				memory: memoryMB,
+				cpu: app.monit.cpu,
+				uptime: formatUptime(Date.now() - app.pm2_env.pm_uptime),
+				restarts: app.pm2_env.restart_time,
+			};
+		});
 
 		return NextResponse.json({
 			uptime,
@@ -76,7 +68,7 @@ export async function GET() {
 				speed: cpus[0].speed,
 			},
 			processCount,
-			pm2: pm2WithLogs,
+			pm2: pm2WithoutLogs,
 		});
 	} catch (error) {
 		return NextResponse.json({ error: (error as Error).message }, { status: 500 });

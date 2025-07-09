@@ -13,3 +13,17 @@ export function debounce<T extends (...args: any[]) => void>(fn: T, wait: number
 		timeout = setTimeout(() => fn(...args), wait);
 	};
 }
+
+export function calculateCpuUsagePercent(loadAverage: number[] | undefined, cpuCount: number | undefined): number {
+	if (Array.isArray(loadAverage) && loadAverage.length > 0 && cpuCount) {
+		return Number(((loadAverage[0] * 100) / cpuCount).toFixed(2));
+	}
+	return 0;
+}
+
+export function calculateMemoryUsagePercent(used: number | undefined, total: number | undefined): number {
+	if (typeof used === "number" && typeof total === "number" && total > 0) {
+		return Number(((used / total) * 100).toFixed(2));
+	}
+	return 0;
+}

@@ -7,6 +7,7 @@ import { useMonitor } from "@/hooks/use-monitor";
 import { MonitorApiResponse, PM2APIResponse } from "@/types/monitor";
 import { Activity, Cpu, MemoryStick, Server } from "lucide-react";
 import { useEffect, useState } from "react";
+import { calculateCpuUsagePercent, calculateMemoryUsagePercent } from "@/lib/utils";
 
 export default function Page() {
 	const [bots, setBots] = useState<PM2APIResponse[]>([]);
@@ -24,14 +25,8 @@ export default function Page() {
 				setBots(data.pm2);
 			}
 			// Calculate cpu and memory usage
-			const cpu =
-				Array.isArray(data.loadAverage) && data.loadAverage.length > 0 && data.cpu.count
-					? Number(((data.loadAverage[0] * 100) / data.cpu.count).toFixed(2))
-					: 0;
-			const memory =
-				data.memory && data.memory.total
-					? Number(((data.memory.used / data.memory.total) * 100).toFixed(2))
-					: 0;
+			const cpu = calculateCpuUsagePercent(data.loadAverage, data.cpu.count);
+			const memory = calculateMemoryUsagePercent(data.memory.used, data.memory.total);
 			setChartData((prev) => [
 				...prev,
 				{
@@ -46,13 +41,9 @@ export default function Page() {
 	const onlineBots = bots.filter((bot) => bot.status === "online").length;
 	const totalBots = bots.length;
 
-	const cpuUsage = systemMetrics
-		? Array.isArray(systemMetrics.loadAverage) && systemMetrics.loadAverage.length > 0
-			? Number(((systemMetrics.loadAverage[0] * 100) / systemMetrics.cpu.count).toFixed(2))
-			: 0
-		: 0;
+	const cpuUsage = systemMetrics ? calculateCpuUsagePercent(systemMetrics.loadAverage, systemMetrics.cpu.count) : 0;
 	const memoryUsage = systemMetrics
-		? Number(((systemMetrics.memory.used / systemMetrics.memory.total) * 100).toFixed(2))
+		? calculateMemoryUsagePercent(systemMetrics.memory.used, systemMetrics.memory.total)
 		: 0;
 	const usedMemory = systemMetrics ? `${systemMetrics.memory.used} MB` : "-";
 	const totalMemory = systemMetrics ? `${systemMetrics.memory.total} MB` : "-";

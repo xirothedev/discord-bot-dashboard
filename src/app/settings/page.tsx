@@ -1,7 +1,5 @@
 "use client";
 
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -23,6 +21,7 @@ export default function SettingsPage() {
 					<span className="font-medium">Dark Mode</span>
 					<Switch
 						checked={isClient && theme === "dark" ? true : false}
+						className="bg-white"
 						onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
 						aria-label="Toggle dark mode"
 					/>

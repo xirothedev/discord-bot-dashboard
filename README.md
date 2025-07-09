@@ -81,6 +81,7 @@
 
 - `GET /api/monitor`: Get system info, bot statuses, logs, CPU, RAM, uptime, etc.
 - `GET /api/version`: Get current PM2 and Node.js versions.
+- `GET /api/logs?page=number&limit=number`: Get PM2 logs
 - `POST /api/actions`: Start, stop, or restart a PM2 process by id.
 
     **Payload:**

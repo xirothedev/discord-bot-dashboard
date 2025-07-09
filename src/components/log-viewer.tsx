@@ -4,53 +4,30 @@ import { LogFilters } from "@/components/log-filters";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useMonitor } from "@/hooks/use-monitor";
-import { LogContent, LogFilter } from "@/types/log";
+import { useLogs } from "@/hooks/use-logs";
+import { LogApiLogEntry, LogFilter } from "@/types/log";
 import { Download } from "lucide-react";
-import { useEffect, useState, Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 export function LogViewer() {
-	const { data, isLoading } = useMonitor();
-	const [logs, setLogs] = useState<LogContent[]>([]);
+	const { data, isLoading } = useLogs({});
+	const [logs, setLogs] = useState<LogApiLogEntry[]>([]);
 	const [filters, setFilters] = useState<LogFilter>({});
 
 	useEffect(() => {
 		if (!data) return;
-		const allLogs: LogContent[] = [];
-
-		if (data.pm2) {
-			data.pm2.forEach((bot) => {
-				if (bot.logs?.stderr) {
-					bot.logs.stderr.forEach((stde) => {
-						allLogs.push({
-							botId: bot.pid.toString(),
-							botName: bot.name,
-							content: stde,
-							type: "stderr",
-						});
-					});
-				}
-				if (bot.logs?.stdout) {
-					bot.logs.stdout.forEach((stdo) => {
-						allLogs.push({
-							botId: bot.pid.toString(),
-							botName: bot.name,
-							content: stdo,
-							type: "stdout",
-						});
-					});
-				}
+		const filtered: LogApiLogEntry[] = [];
+		data.forEach((bot) => {
+			if (filters.botId && bot.pm_id.toString() !== filters.botId) return;
+			const filteredLogs = bot.logs.filter((log) => {
+				if (filters.type && log.type !== filters.type) return false;
+				if (filters.search && !log.content.includes(filters.search)) return false;
+				return true;
 			});
-		}
-
-		const filteredLogs = allLogs.filter((log) => {
-			if (filters.botId && log.botId !== filters.botId) return false;
-			if (filters.type && log.type !== filters.type) return false;
-			if (filters.search && !log.content.includes(filters.search)) return false;
-			return true;
+			// Optionally, add bot info to each log
+			filtered.push(...filteredLogs.map((l) => ({ ...l, pm_id: bot.pm_id, name: bot.name, pid: bot.pid })));
 		});
-
-		setLogs(filteredLogs.reverse());
+		setLogs(filtered);
 	}, [data, filters]);
 
 	const exportLogs = () => {
@@ -70,7 +47,7 @@ export function LogViewer() {
 				<LogFilters
 					filters={filters}
 					onFiltersChange={setFilters}
-					bots={data?.pm2.map((bot) => ({ id: bot.pid, name: bot.name }))}
+					bots={data?.map((bot) => ({ id: bot.pm_id, name: bot.name }))}
 				/>
 
 				<Card className="cyber-gradient cyber-border border">
@@ -100,18 +77,18 @@ export function LogViewer() {
 								{isLoading ? (
 									<div className="space-y-2">
 										{Array.from({ length: 30 }).map((_, i) => (
-											<div key={i} className="h-4 w-full animate-pulse rounded bg-muted"></div>
+											<div key={i} className="bg-muted h-4 w-full animate-pulse rounded"></div>
 										))}
 									</div>
 								) : logs.length === 0 ? (
-									<div className="py-8 text-center text-muted-foreground">
+									<div className="text-muted-foreground py-8 text-center">
 										No logs found matching the current filters.
 									</div>
 								) : (
 									logs.map((log, index) => {
 										return (
 											<p key={index} className="mb-1 text-sm font-medium">
-												{log.content}
+												[{log.type}] {log.content}
 											</p>
 										);
 									})
@@ -130,7 +107,7 @@ const Loading = () => {
 		<div className="space-y-4">
 			<div className="space-y-2">
 				{Array.from({ length: 30 }).map((_, i) => (
-					<div key={i} className="h-4 w-full animate-pulse rounded bg-muted"></div>
+					<div key={i} className="bg-muted h-4 w-full animate-pulse rounded"></div>
 				))}
 			</div>
 		</div>
